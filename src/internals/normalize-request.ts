@@ -25,7 +25,13 @@ export interface NormalizedRequest {
  * e.g. header merging must happen before auto-serialization, so serialization can see any
  * Content-Type the caller already set.
  */
-export function normalizeRequest({ method, url, body, config, options }: NormalizeRequestInput): NormalizedRequest {
+export function normalizeRequest({
+  method,
+  url,
+  body,
+  config,
+  options,
+}: NormalizeRequestInput): NormalizedRequest {
   // 1. Merge headers — instance, then per-call on top (per-call wins).
   const headers = new Headers(config.headers);
   if (options?.headers) {

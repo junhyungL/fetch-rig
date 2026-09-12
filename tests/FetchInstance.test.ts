@@ -14,19 +14,29 @@ let lastRequestUrl = '';
 
 const server = setupServer(
   http.get('https://api.example.com/ping', () => HttpResponse.json({ pong: true })),
-  http.get('https://api.example.com/broken', () => HttpResponse.json({ message: 'nope' }, { status: 500 })),
+  http.get('https://api.example.com/broken', () =>
+    HttpResponse.json({ message: 'nope' }, { status: 500 }),
+  ),
   http.post('https://api.example.com/echo', async ({ request }) => {
     const body = await request.json();
     return HttpResponse.json(body);
   }),
   http.head('https://api.example.com/resource', () => new HttpResponse(null, { status: 200 })),
-  http.options('https://api.example.com/resource', () => new HttpResponse(null, { status: 204, headers: { Allow: 'GET, HEAD, OPTIONS' } })),
+  http.options(
+    'https://api.example.com/resource',
+    () => new HttpResponse(null, { status: 204, headers: { Allow: 'GET, HEAD, OPTIONS' } }),
+  ),
   http.delete('https://api.example.com/resource/1', () => new HttpResponse(null, { status: 204 })),
-  http.put('https://api.example.com/resource/1', async ({ request }) => HttpResponse.json(await request.json())),
-  http.patch('https://api.example.com/resource/1', async ({ request }) => HttpResponse.json(await request.json())),
+  http.put('https://api.example.com/resource/1', async ({ request }) =>
+    HttpResponse.json(await request.json()),
+  ),
+  http.patch('https://api.example.com/resource/1', async ({ request }) =>
+    HttpResponse.json(await request.json()),
+  ),
   http.get('https://api.example.com/flaky-instance', () => {
     attempts++;
-    if (attempts < 2) return HttpResponse.json({}, { status: 503, headers: { 'Retry-After': '0' } });
+    if (attempts < 2)
+      return HttpResponse.json({}, { status: 503, headers: { 'Retry-After': '0' } });
     return HttpResponse.json({ recovered: true });
   }),
   http.get('https://api.example.com/protected', ({ request }) => {
@@ -136,7 +146,10 @@ describe('FetchInstance / fr', () => {
   });
 
   it('retries through a real flaky endpoint when retry is configured', async () => {
-    const api = fr.create({ baseUrl: 'https://api.example.com', middlewares: [retry({ limit: 3 })] });
+    const api = fr.create({
+      baseUrl: 'https://api.example.com',
+      middlewares: [retry({ limit: 3 })],
+    });
     const response = await api.get('/flaky-instance');
     expect(attempts).toBe(2);
     await expect(response.json()).resolves.toEqual({ recovered: true });
@@ -172,7 +185,9 @@ describe('FetchInstance / fr', () => {
     const api = fr.create({ baseUrl: 'https://api.example.com' });
     const controller = new AbortController();
     controller.abort('stop');
-    await expect(api.get('/ping', { signal: controller.signal })).rejects.toMatchObject({ reason: 'stop' });
+    await expect(api.get('/ping', { signal: controller.signal })).rejects.toMatchObject({
+      reason: 'stop',
+    });
   });
 
   it('raises a clear internal error if a misbehaving middleware short-circuits without producing a response', async () => {

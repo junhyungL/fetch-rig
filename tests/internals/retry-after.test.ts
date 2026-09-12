@@ -32,8 +32,23 @@ describe('parseRetryAfter', () => {
 
   it('parses an RFC 850 date', () => {
     const future = new Date(Date.now() + 60_000);
-    const weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][future.getUTCDay()];
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][
+      future.getUTCDay()
+    ];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     const dd = String(future.getUTCDate()).padStart(2, '0');
     const mon = months[future.getUTCMonth()];
     const yy = String(future.getUTCFullYear()).slice(-2);
@@ -50,7 +65,20 @@ describe('parseRetryAfter', () => {
   it('parses an asctime date', () => {
     const future = new Date(Date.now() + 60_000);
     const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     const day = future.getUTCDate();
     const dayStr = day < 10 ? ` ${day}` : String(day);
     const hh = String(future.getUTCHours()).padStart(2, '0');
@@ -90,7 +118,20 @@ describe('parseRetryAfter', () => {
     try {
       const base = new Date(Date.now() + 60_000);
       base.setUTCSeconds(0, 0);
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
       const dd = String(base.getUTCDate()).padStart(2, '0');
       const mon = months[base.getUTCMonth()];
       const hh = String(base.getUTCHours()).padStart(2, '0');
@@ -98,7 +139,9 @@ describe('parseRetryAfter', () => {
       const leapDate = `Mon, ${dd} ${mon} ${base.getUTCFullYear()} ${hh}:${mi}:60 GMT`;
       const nextMinuteDate = new Date(base.getTime() + 60_000).toUTCString();
 
-      expect(parseRetryAfter(headersWith(leapDate))).toBe(parseRetryAfter(headersWith(nextMinuteDate)));
+      expect(parseRetryAfter(headersWith(leapDate))).toBe(
+        parseRetryAfter(headersWith(nextMinuteDate)),
+      );
     } finally {
       vi.useRealTimers();
     }

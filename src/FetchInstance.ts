@@ -59,7 +59,11 @@ export class FetchInstance {
   /** The primitive every verb method above calls into. Use it directly for a dynamic method. */
   async send(request: FetchRequest): Promise<FetchResponse> {
     const { method, url, body, ...options } = request;
-    const { request: normalizedRequest, signal, uploadBytes } = normalizeRequest({
+    const {
+      request: normalizedRequest,
+      signal,
+      uploadBytes,
+    } = normalizeRequest({
       method,
       url,
       body,
@@ -85,7 +89,10 @@ export class FetchInstance {
     }
 
     const throwOnError = options.throwOnError ?? this.#config.throwOnError ?? false;
-    const shouldThrow = typeof throwOnError === 'function' ? throwOnError(ctx.response.status) : throwOnError && !ctx.response.ok;
+    const shouldThrow =
+      typeof throwOnError === 'function'
+        ? throwOnError(ctx.response.status)
+        : throwOnError && !ctx.response.ok;
     if (shouldThrow) {
       throw await HTTPError.from(ctx.response, ctx.request);
     }

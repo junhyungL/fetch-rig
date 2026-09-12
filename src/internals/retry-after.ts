@@ -21,7 +21,14 @@ interface DateParts {
   seconds: string;
 }
 
-function createTimestamp({ year, month, day, hours, minutes, seconds }: DateParts): number | undefined {
+function createTimestamp({
+  year,
+  month,
+  day,
+  hours,
+  minutes,
+  seconds,
+}: DateParts): number | undefined {
   const monthIndex = MONTHS.indexOf(month);
   const dayNumber = Number(day);
   const hoursNumber = Number(hours);
@@ -32,7 +39,9 @@ function createTimestamp({ year, month, day, hours, minutes, seconds }: DatePart
   }
 
   const normalizedSeconds = Math.min(secondsNumber, 59);
-  const date = new Date(Date.UTC(year, monthIndex, dayNumber, hoursNumber, minutesNumber, normalizedSeconds));
+  const date = new Date(
+    Date.UTC(year, monthIndex, dayNumber, hoursNumber, minutesNumber, normalizedSeconds),
+  );
   date.setUTCFullYear(year); // guards against Date.UTC() treating a 2-digit year as 19xx
 
   // Date.UTC silently rolls over out-of-range values, so read each field back to confirm it was actually valid.
@@ -53,7 +62,14 @@ function createTimestamp({ year, month, day, hours, minutes, seconds }: DatePart
 function parseHttpDate(value: string): number | undefined {
   const imf = IMF_FIXDATE_RE.exec(value);
   if (imf) {
-    return createTimestamp({ day: imf[1], month: imf[2], year: Number(imf[3]), hours: imf[4], minutes: imf[5], seconds: imf[6] });
+    return createTimestamp({
+      day: imf[1],
+      month: imf[2],
+      year: Number(imf[3]),
+      hours: imf[4],
+      minutes: imf[5],
+      seconds: imf[6],
+    });
   }
 
   const rfc850 = RFC850_RE.exec(value);
@@ -72,8 +88,19 @@ function parseHttpDate(value: string): number | undefined {
 
     // RFC 9110: a 2-digit year resolves to the latest century that doesn't exceed 50 years from now.
     let timestamp: number | undefined;
-    for (const year of [currentCentury - 100 + twoDigitYear, currentCentury + twoDigitYear, currentCentury + 100 + twoDigitYear]) {
-      const candidate = createTimestamp({ day: rfc850[1], month: rfc850[2], year, hours: rfc850[4], minutes: rfc850[5], seconds: rfc850[6] });
+    for (const year of [
+      currentCentury - 100 + twoDigitYear,
+      currentCentury + twoDigitYear,
+      currentCentury + 100 + twoDigitYear,
+    ]) {
+      const candidate = createTimestamp({
+        day: rfc850[1],
+        month: rfc850[2],
+        year,
+        hours: rfc850[4],
+        minutes: rfc850[5],
+        seconds: rfc850[6],
+      });
       if (candidate !== undefined && candidate <= fiftyYearsFromNow) {
         timestamp = candidate;
       }
@@ -84,7 +111,14 @@ function parseHttpDate(value: string): number | undefined {
   const asctime = ASCTIME_RE.exec(value);
   if (asctime) {
     const [hours, minutes, seconds] = asctime[3].split(':') as [string, string, string];
-    return createTimestamp({ day: asctime[2].trim(), month: asctime[1], year: Number(asctime[4]), hours, minutes, seconds });
+    return createTimestamp({
+      day: asctime[2].trim(),
+      month: asctime[1],
+      year: Number(asctime[4]),
+      hours,
+      minutes,
+      seconds,
+    });
   }
 
   return undefined;

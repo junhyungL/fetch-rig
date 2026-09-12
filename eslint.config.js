@@ -1,5 +1,6 @@
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
+import prettier from 'eslint-config-prettier';
 
 export default tseslint.config(
   {
@@ -20,7 +21,10 @@ export default tseslint.config(
       // actual fix: catching a missing await statically instead of at runtime.
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/require-await': 'error',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
     },
   },
   {
@@ -39,4 +43,5 @@ export default tseslint.config(
     files: ['*.config.js', '*.config.ts'],
     extends: [tseslint.configs.disableTypeChecked],
   },
+  prettier,
 );

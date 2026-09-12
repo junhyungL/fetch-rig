@@ -7,7 +7,10 @@
  * is held back in `remainder` rather than resolved, until the next chunk (or end of stream)
  * settles it.
  */
-export function bufferLines(buffer: string, isFinal: boolean): { lines: string[]; remainder: string } {
+export function bufferLines(
+  buffer: string,
+  isFinal: boolean,
+): { lines: string[]; remainder: string } {
   const lines: string[] = [];
   let lineStart = 0;
   let i = 0;

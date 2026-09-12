@@ -168,7 +168,10 @@ describe('withDownloadProgress', () => {
     });
 
     it('omits estimated (but still reports rate) when total is unknown', async () => {
-      vi.spyOn(performance, 'now').mockReturnValueOnce(1000).mockReturnValueOnce(2000).mockReturnValueOnce(3000);
+      vi.spyOn(performance, 'now')
+        .mockReturnValueOnce(1000)
+        .mockReturnValueOnce(2000)
+        .mockReturnValueOnce(3000);
 
       const events: ProgressInfo[] = [];
       const body = chunkedStream(['a'.repeat(10), 'b'.repeat(10)]);
@@ -211,7 +214,9 @@ describe('withDownloadProgress', () => {
 
     it('does not trust a lying Content-Length header — enforces the limit against real bytes', async () => {
       // Server declares a small Content-Length but actually sends more.
-      const response = new Response(chunkedStream(['a'.repeat(20)]), { headers: { 'Content-Length': '1' } });
+      const response = new Response(chunkedStream(['a'.repeat(20)]), {
+        headers: { 'Content-Length': '1' },
+      });
       const wrapped = withDownloadProgress(response, undefined, 8);
 
       await expect(readAll(wrapped.body!)).rejects.toBeInstanceOf(TooLargeError);
@@ -223,9 +228,12 @@ describe('withDownloadProgress', () => {
       // withProgress (which reports chunk N-1 only once chunk N arrives, per its delayed-publish
       // design) never sees chunk N at all. 4 chunks / cap after the 3rd leaves room for exactly
       // one onProgress call (for chunk 1, published when chunk 2 arrives) before the abort.
-      const response = new Response(chunkedStream(['a'.repeat(5), 'b'.repeat(5), 'c'.repeat(5), 'd'.repeat(5)]), {
-        headers: { 'Content-Length': '20' },
-      });
+      const response = new Response(
+        chunkedStream(['a'.repeat(5), 'b'.repeat(5), 'c'.repeat(5), 'd'.repeat(5)]),
+        {
+          headers: { 'Content-Length': '20' },
+        },
+      );
       const wrapped = withDownloadProgress(response, (progress) => events.push(progress), 13);
 
       await expect(readAll(wrapped.body!)).rejects.toBeInstanceOf(TooLargeError);
@@ -262,7 +270,11 @@ describe('withUploadProgress', () => {
   it('calls onStart synchronously on the first chunk, before onProgress ever fires', async () => {
     const startOrder: string[] = [];
     const body = chunkedStream(['a', 'b']);
-    const request = new Request('https://api.example.com/x', { method: 'POST', body, duplex: 'half' } as RequestInit);
+    const request = new Request('https://api.example.com/x', {
+      method: 'POST',
+      body,
+      duplex: 'half',
+    } as RequestInit);
 
     const wrapped = withUploadProgress(
       request,
@@ -278,7 +290,12 @@ describe('withUploadProgress', () => {
   it('never calls onStart when the request has no body to stream', () => {
     const request = new Request('https://api.example.com/x');
     let started = false;
-    withUploadProgress(request, 0, () => {}, () => (started = true));
+    withUploadProgress(
+      request,
+      0,
+      () => {},
+      () => (started = true),
+    );
     expect(started).toBe(false);
   });
 });

@@ -21,7 +21,10 @@ beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-function contextFor(path: string, options?: Parameters<typeof normalizeRequest>[0]['options']): FetchContext {
+function contextFor(
+  path: string,
+  options?: Parameters<typeof normalizeRequest>[0]['options'],
+): FetchContext {
   const { request, signal } = normalizeRequest({
     method: 'GET',
     url: path,

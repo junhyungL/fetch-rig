@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { toIterator } from '../../src/internals/stream-iterator';
 
-function trackedStream(values: number[]): { stream: ReadableStream<number>; cancelReason: { value: unknown; called: boolean } } {
+function trackedStream(values: number[]): {
+  stream: ReadableStream<number>;
+  cancelReason: { value: unknown; called: boolean };
+} {
   const cancelReason = { value: undefined as unknown, called: false };
   let i = 0;
   const stream = new ReadableStream<number>({

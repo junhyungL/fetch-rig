@@ -16,11 +16,16 @@ Run all of these locally — the same checks run in CI against Node 20/22/24, an
 merged until they pass:
 
 ```bash
+npm run format:check
 npm run lint
 npm run typecheck
 npm run test:coverage
 npm run build
 ```
+
+Run `npm run format` to auto-fix formatting. Formatting only covers code and config files —
+Markdown docs are excluded (`.prettierignore`) so their hand-formatted tables and prose stay as
+written.
 
 - **Coverage stays at 100%** (statements/branches/functions/lines) — see
   [docs/TESTING.md](docs/TESTING.md) for how existing gaps were handled. A change that drops
@@ -38,7 +43,8 @@ before merge.
 
 ## Releasing (maintainers)
 
-Bump `version` in `package.json`, add a matching `## [x.y.z]` entry to `CHANGELOG.md`, commit,
+Bump `version` in `package.json` and in `skills/fetch-rig/SKILL.md`'s frontmatter, add a matching
+`## [x.y.z]` entry to `CHANGELOG.md`, commit,
 then `git tag vX.Y.Z && git push origin vX.Y.Z`. The tag push runs the full check suite,
 publishes to npm, and creates a GitHub Release from the changelog entry — no manual npm login or
 OTP required.

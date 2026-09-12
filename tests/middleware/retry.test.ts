@@ -67,9 +67,9 @@ describe('retry', () => {
     };
 
     const dispatch = compose([retry({ ...fastOptions, limit: 5 })], core);
-    await expect(dispatch(createContext(new Request('https://api.example.com/x')))).rejects.toBeInstanceOf(
-      CanceledError,
-    );
+    await expect(
+      dispatch(createContext(new Request('https://api.example.com/x'))),
+    ).rejects.toBeInstanceOf(CanceledError);
   });
 
   it('retries a NetworkError by default', async () => {
@@ -96,10 +96,7 @@ describe('retry', () => {
       ctx.response = new Response(null, { status: 200 });
     };
 
-    const dispatch = compose(
-      [retry({ ...fastOptions, shouldRetry: () => true })],
-      core,
-    );
+    const dispatch = compose([retry({ ...fastOptions, shouldRetry: () => true })], core);
     const ctx = createContext(new Request('https://api.example.com/x'));
     await dispatch(ctx);
 
@@ -195,7 +192,7 @@ describe('retry', () => {
     expect(calls).toBe(2);
   });
 
-  it('uses a custom jitter function\'s return value for the delay', async () => {
+  it("uses a custom jitter function's return value for the delay", async () => {
     let calls = 0;
     const core: Dispatch = async (ctx) => {
       calls++;
@@ -219,10 +216,7 @@ describe('retry', () => {
       ctx.response = new Response(null, { status: calls < 2 ? 500 : 200 });
     };
 
-    const dispatch = compose(
-      [retry({ ...fastOptions, limit: 1, jitter: () => Number.NaN })],
-      core,
-    );
+    const dispatch = compose([retry({ ...fastOptions, limit: 1, jitter: () => Number.NaN })], core);
     await dispatch(createContext(new Request('https://api.example.com/x')));
 
     expect(calls).toBe(2); // still completes — invalid jitter value didn't break the retry

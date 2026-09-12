@@ -5,7 +5,11 @@ import { byCharacter, collect, stringSource } from './helpers';
 describe('TextLineStream', () => {
   it('splits on newlines', async () => {
     const values = await collect(stringSource(['a\nb\nc']), new TextLineStream());
-    expect(values).toEqual([{ type: 'text', data: 'a' }, { type: 'text', data: 'b' }, { type: 'text', data: 'c' }]);
+    expect(values).toEqual([
+      { type: 'text', data: 'a' },
+      { type: 'text', data: 'b' },
+      { type: 'text', data: 'c' },
+    ]);
   });
 
   it('emits the final unterminated line at stream end', async () => {

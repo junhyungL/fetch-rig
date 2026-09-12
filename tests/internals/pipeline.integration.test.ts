@@ -18,7 +18,10 @@ const server = setupServer(
   http.get('https://api.example.com/flaky', () => {
     attempts++;
     if (attempts < 3) {
-      return HttpResponse.json({ error: 'try again' }, { status: 503, headers: { 'Retry-After': '0' } });
+      return HttpResponse.json(
+        { error: 'try again' },
+        { status: 503, headers: { 'Retry-After': '0' } },
+      );
     }
     return HttpResponse.json({ ok: true });
   }),

@@ -9,22 +9,25 @@ vi.mock('../../src/internals/duplex-support', async (importOriginal) => {
 });
 
 describe('normalizeRequest on a runtime that does not support streaming request bodies', () => {
-  it('never sets duplex — proven indirectly, since Request has no public duplex getter to inspect: ' +
-    'constructing a Request with a streaming body and no duplex option throws per the Fetch spec', async () => {
-    const { normalizeRequest } = await import('../../src/internals/normalize-request');
-    const stream = new ReadableStream<Uint8Array>({
-      start(controller) {
-        controller.close();
-      },
-    });
+  it(
+    'never sets duplex — proven indirectly, since Request has no public duplex getter to inspect: ' +
+      'constructing a Request with a streaming body and no duplex option throws per the Fetch spec',
+    async () => {
+      const { normalizeRequest } = await import('../../src/internals/normalize-request');
+      const stream = new ReadableStream<Uint8Array>({
+        start(controller) {
+          controller.close();
+        },
+      });
 
-    expect(() =>
-      normalizeRequest({
-        method: 'POST',
-        url: '/x',
-        body: stream,
-        config: { baseUrl: 'https://api.example.com' },
-      }),
-    ).toThrow();
-  });
+      expect(() =>
+        normalizeRequest({
+          method: 'POST',
+          url: '/x',
+          body: stream,
+          config: { baseUrl: 'https://api.example.com' },
+        }),
+      ).toThrow();
+    },
+  );
 });

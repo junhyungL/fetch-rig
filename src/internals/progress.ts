@@ -94,7 +94,10 @@ export function withUploadProgress(
  * it checks the running total the instant each chunk arrives, with no delay. Never trusts the
  * `Content-Length` header, since it can be absent or lie; only actually-received bytes count.
  */
-function withMaxSize(stream: ReadableStream<Uint8Array>, maxBytes: number): ReadableStream<Uint8Array> {
+function withMaxSize(
+  stream: ReadableStream<Uint8Array>,
+  maxBytes: number,
+): ReadableStream<Uint8Array> {
   let receivedBytes = 0;
   return stream.pipeThrough(
     new TransformStream<Uint8Array, Uint8Array>({
@@ -115,7 +118,11 @@ function withMaxSize(stream: ReadableStream<Uint8Array>, maxBytes: number): Read
  * when present. Returns the original response untouched if neither `onProgress` nor `maxBytes`
  * is given.
  */
-export function withDownloadProgress(response: Response, onProgress?: ProgressCallback, maxBytes?: number): Response {
+export function withDownloadProgress(
+  response: Response,
+  onProgress?: ProgressCallback,
+  maxBytes?: number,
+): Response {
   if (!response.body || response.status === 204) return response;
   if (!onProgress && maxBytes === undefined) return response;
 

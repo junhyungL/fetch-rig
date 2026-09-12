@@ -68,7 +68,10 @@ export class SseStream extends TransformStream<string, SseStreamResponse> {
     let buffer = '';
     let draft = createDraftEvent();
 
-    const consumeLines = (lines: string[], controller: TransformStreamDefaultController<SseStreamResponse>) => {
+    const consumeLines = (
+      lines: string[],
+      controller: TransformStreamDefaultController<SseStreamResponse>,
+    ) => {
       for (const line of lines) {
         if (line === '') {
           if (draft.hasData) controller.enqueue(toEvent(draft));
@@ -83,7 +86,11 @@ export class SseStream extends TransformStream<string, SseStreamResponse> {
       transform(chunk, controller) {
         buffer += chunk;
         if (buffer.length > MAX_BUFFER_SIZE) {
-          controller.error(new Error(`SSE stream: buffered data exceeded ${MAX_BUFFER_SIZE} characters without a line terminator.`));
+          controller.error(
+            new Error(
+              `SSE stream: buffered data exceeded ${MAX_BUFFER_SIZE} characters without a line terminator.`,
+            ),
+          );
           return;
         }
         const { lines, remainder } = bufferLines(buffer, false);

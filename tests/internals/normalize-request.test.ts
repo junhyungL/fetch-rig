@@ -42,7 +42,10 @@ describe('normalizeRequest', () => {
       method: 'POST',
       url: '/x',
       body: form,
-      config: { baseUrl: 'https://api.example.com', headers: { 'Content-Type': 'application/json' } },
+      config: {
+        baseUrl: 'https://api.example.com',
+        headers: { 'Content-Type': 'application/json' },
+      },
     });
     // Must not be the stale 'application/json' — the runtime fills in multipart/form-data;
     // boundary=... once the body is actually sent.

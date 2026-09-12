@@ -26,7 +26,7 @@ describe('FetchError hierarchy', () => {
     expect(error.message).toBe('user cancelled');
   });
 
-  it('CanceledError uses an Error reason\'s message, and falls back to a generic message otherwise', () => {
+  it("CanceledError uses an Error reason's message, and falls back to a generic message otherwise", () => {
     const fromError = new CanceledError(new Error('boom'));
     expect(fromError.message).toBe('boom');
 

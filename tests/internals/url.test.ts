@@ -23,21 +23,25 @@ describe('buildUrl', () => {
   });
 
   it('serializes array query values as repeated keys', () => {
-    expect(buildUrl({ baseUrl: 'https://api.example.com', path: '/users', query: { tag: ['a', 'b'] } })).toBe(
-      'https://api.example.com/users?tag=a&tag=b',
-    );
+    expect(
+      buildUrl({ baseUrl: 'https://api.example.com', path: '/users', query: { tag: ['a', 'b'] } }),
+    ).toBe('https://api.example.com/users?tag=a&tag=b');
   });
 
   it('merges an inline query string on path with the structured query option', () => {
     expect(
-      buildUrl({ baseUrl: 'https://api.example.com', path: '/users?active=true', query: { page: 2 } }),
+      buildUrl({
+        baseUrl: 'https://api.example.com',
+        path: '/users?active=true',
+        query: { page: 2 },
+      }),
     ).toBe('https://api.example.com/users?active=true&page=2');
   });
 
   it('drops undefined query values', () => {
-    expect(buildUrl({ baseUrl: 'https://api.example.com', path: '/x', query: { a: 1, b: undefined } })).toBe(
-      'https://api.example.com/x?a=1',
-    );
+    expect(
+      buildUrl({ baseUrl: 'https://api.example.com', path: '/x', query: { a: 1, b: undefined } }),
+    ).toBe('https://api.example.com/x?a=1');
   });
 
   it('throws when neither baseUrl nor path is given', () => {

@@ -4,7 +4,7 @@ description: Zero-dependency universal HTTP client built purely on the Fetch API
 license: MIT
 metadata:
   author: fetch-rig contributors
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # fetch-rig

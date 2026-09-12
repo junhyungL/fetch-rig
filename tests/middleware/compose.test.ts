@@ -13,11 +13,14 @@ function createContext(): FetchContext {
 describe('compose', () => {
   it('runs middlewares in onion order: request phase in registration order, response phase in reverse', async () => {
     const log: string[] = [];
-    const makeMiddleware = (name: string): FetchMiddleware => (next) => async (ctx) => {
-      log.push(`${name}:before`);
-      await next(ctx);
-      log.push(`${name}:after`);
-    };
+    const makeMiddleware =
+      (name: string): FetchMiddleware =>
+      (next) =>
+      async (ctx) => {
+        log.push(`${name}:before`);
+        await next(ctx);
+        log.push(`${name}:after`);
+      };
 
     const core: Dispatch = async () => {
       log.push('core');
@@ -26,7 +29,15 @@ describe('compose', () => {
     const dispatch = compose([makeMiddleware('a'), makeMiddleware('b'), makeMiddleware('c')], core);
     await dispatch(createContext());
 
-    expect(log).toEqual(['a:before', 'b:before', 'c:before', 'core', 'c:after', 'b:after', 'a:after']);
+    expect(log).toEqual([
+      'a:before',
+      'b:before',
+      'c:before',
+      'core',
+      'c:after',
+      'b:after',
+      'a:after',
+    ]);
   });
 
   it('lets a single middleware call next() multiple times (retry-like usage)', async () => {

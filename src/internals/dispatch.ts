@@ -62,7 +62,12 @@ export const dispatch: Dispatch = async (ctx) => {
   }
 
   try {
-    await send(ctx.onUpload ? withUploadProgress(ctx.request, ctx.uploadBytes ?? 0, ctx.onUpload) : ctx.request, ctx);
+    await send(
+      ctx.onUpload
+        ? withUploadProgress(ctx.request, ctx.uploadBytes ?? 0, ctx.onUpload)
+        : ctx.request,
+      ctx,
+    );
   } catch (error) {
     throw normalizeError(error, ctx.signal, ctx.request);
   }

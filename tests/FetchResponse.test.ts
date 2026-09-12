@@ -81,7 +81,7 @@ describe('FetchResponse', () => {
     await expect(response.bytes()).resolves.toEqual(new Uint8Array([4, 5, 6]));
   });
 
-  it('does not throw for a non-2xx status — throwOnError is the caller\'s responsibility', () => {
+  it("does not throw for a non-2xx status — throwOnError is the caller's responsibility", () => {
     const response = new FetchResponse(new Response(null, { status: 500 }));
     expect(response.ok).toBe(false);
     expect(response.status).toBe(500);

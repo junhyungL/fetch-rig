@@ -75,7 +75,10 @@ export class JsonLineStream extends TransformStream<string, JsonStreamResponse> 
   constructor() {
     let buffer = '';
 
-    const emit = (raw: string, controller: TransformStreamDefaultController<JsonStreamResponse>) => {
+    const emit = (
+      raw: string,
+      controller: TransformStreamDefaultController<JsonStreamResponse>,
+    ) => {
       try {
         JSON.parse(raw); // validity check only — the raw text is forwarded, not the parsed value
         controller.enqueue({ type: 'json', data: raw });
@@ -84,7 +87,11 @@ export class JsonLineStream extends TransformStream<string, JsonStreamResponse> 
         // here is unreachable in practice — kept only in case a future runtime/polyfill breaks
         // that contract, not because there's a real input that hits it.
         /* v8 ignore next */
-        controller.enqueue({ type: 'json', data: raw, error: error instanceof Error ? error : new Error(String(error)) });
+        controller.enqueue({
+          type: 'json',
+          data: raw,
+          error: error instanceof Error ? error : new Error(String(error)),
+        });
       }
     };
 

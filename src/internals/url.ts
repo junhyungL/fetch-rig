@@ -54,7 +54,8 @@ export function stringifyQuery(query?: QueryInit): string {
  * ky/ofetch follow: an absolute input bypasses baseUrl).
  */
 export function buildUrl({ baseUrl, path, query }: UrlParts): string {
-  const joined = path !== undefined && ABSOLUTE_URL_RE.test(path) ? path : joinPath(baseUrl ?? '', path);
+  const joined =
+    path !== undefined && ABSOLUTE_URL_RE.test(path) ? path : joinPath(baseUrl ?? '', path);
   if (!joined) {
     throw new Error('A base URL or path is required to build a request URL.');
   }

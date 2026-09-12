@@ -14,11 +14,15 @@ describe('guessFormat', () => {
   it('detects JSON from a +json structured syntax suffix (RFC 6839)', () => {
     expect(guessFormat(new Headers({ 'Content-Type': 'application/vnd.api+json' }))).toBe('json');
     expect(guessFormat(new Headers({ 'Content-Type': 'application/ld+json' }))).toBe('json');
-    expect(guessFormat(new Headers({ 'Content-Type': 'application/problem+json; charset=utf-8' }))).toBe('json');
+    expect(
+      guessFormat(new Headers({ 'Content-Type': 'application/problem+json; charset=utf-8' })),
+    ).toBe('json');
   });
 
   it('does not treat an unrelated subtype that merely contains "json" as a +json suffix', () => {
-    expect(guessFormat(new Headers({ 'Content-Type': 'application/x-my-json-thing' }))).toBe('text');
+    expect(guessFormat(new Headers({ 'Content-Type': 'application/x-my-json-thing' }))).toBe(
+      'text',
+    );
   });
 
   it('falls back to text for anything else, including a missing Content-Type', () => {

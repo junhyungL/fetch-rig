@@ -12,8 +12,13 @@ function isTimeoutReason(reason: unknown): boolean {
  * (a direct user `abort()`). Kept in one place because `dispatch` (fetch itself fails) and
  * `retry` (canceled during its backoff wait) both need this same distinction.
  */
-export function normalizeAbortError(signal: AbortSignal, request: Request): TimeoutError | CanceledError {
-  return isTimeoutReason(signal.reason) ? new TimeoutError(request) : new CanceledError(signal.reason);
+export function normalizeAbortError(
+  signal: AbortSignal,
+  request: Request,
+): TimeoutError | CanceledError {
+  return isTimeoutReason(signal.reason)
+    ? new TimeoutError(request)
+    : new CanceledError(signal.reason);
 }
 
 /**
@@ -21,6 +26,10 @@ export function normalizeAbortError(signal: AbortSignal, request: Request): Time
  * aborted, otherwise wrapped as `NetworkError`. Consolidates a check `dispatch.ts` would
  * otherwise repeat across its three call sites (streamed attempt, fallback attempt, plain path).
  */
-export function normalizeError(error: unknown, signal: AbortSignal, request: Request): TimeoutError | CanceledError | NetworkError {
+export function normalizeError(
+  error: unknown,
+  signal: AbortSignal,
+  request: Request,
+): TimeoutError | CanceledError | NetworkError {
   return signal.aborted ? normalizeAbortError(signal, request) : new NetworkError(error);
 }

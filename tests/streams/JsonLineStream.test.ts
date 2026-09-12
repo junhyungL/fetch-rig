@@ -9,10 +9,7 @@ describe('JsonLineStream', () => {
   });
 
   it('parses multiple values concatenated back to back (NDJSON)', async () => {
-    const values = await collect(
-      stringSource(['{"a":1}\n{"b":2}\n{"c":3}']),
-      new JsonLineStream(),
-    );
+    const values = await collect(stringSource(['{"a":1}\n{"b":2}\n{"c":3}']), new JsonLineStream());
     expect(values.map((v) => v.data)).toEqual(['{"a":1}', '{"b":2}', '{"c":3}']);
   });
 
@@ -63,7 +60,10 @@ describe('JsonLineStream', () => {
   it('yields a truncated trailing fragment with `error` set when the stream ends mid-object', async () => {
     // Never closes — depth never returns to 0, so bufferJsonValues() never emits it during
     // transform() and it's still sitting in the buffer when flush() runs.
-    const values = await collect(stringSource(['{"incomplete": "no closing brace"']), new JsonLineStream());
+    const values = await collect(
+      stringSource(['{"incomplete": "no closing brace"']),
+      new JsonLineStream(),
+    );
     expect(values).toHaveLength(1);
     expect(values[0].data).toBe('{"incomplete": "no closing brace"');
     expect(values[0].error).toBeInstanceOf(Error);

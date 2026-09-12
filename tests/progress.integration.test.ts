@@ -81,7 +81,10 @@ describe('upload/download progress end to end', () => {
 
   it('does not duplicate or carry over progress across a retried download', async () => {
     const events: ProgressInfo[] = [];
-    const api = fr.create({ baseUrl: 'https://api.example.com', middlewares: [retry({ limit: 2 })] });
+    const api = fr.create({
+      baseUrl: 'https://api.example.com',
+      middlewares: [retry({ limit: 2 })],
+    });
 
     const response = await api.get('/flaky-download', {
       onDownload: (progress) => events.push(progress),

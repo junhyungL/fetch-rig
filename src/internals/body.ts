@@ -35,7 +35,10 @@ export function serialize(body: unknown, contentType: string | undefined): Seria
     return { body: body as BodyInit, contentType: contentType ?? 'application/octet-stream' };
   }
   if (body instanceof URLSearchParams) {
-    return { body: body.toString(), contentType: 'application/x-www-form-urlencoded;charset=UTF-8' };
+    return {
+      body: body.toString(),
+      contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
+    };
   }
   if (body instanceof FormData) {
     return { body, contentType: null }; // never set the multipart boundary by hand
@@ -62,7 +65,10 @@ export function serialize(body: unknown, contentType: string | undefined): Seria
       return { body: form, contentType: null }; // clear the boundary-less header so the runtime makes a new one
     }
     if (isJsonSerializable(body)) {
-      return { body: JSON.stringify(body), contentType: contentType ?? 'application/json;charset=UTF-8' };
+      return {
+        body: JSON.stringify(body),
+        contentType: contentType ?? 'application/json;charset=UTF-8',
+      };
     }
     // Not JSON-serializable and no explicit hint — pass through as-is, caller/runtime decides.
     return { body: body as BodyInit, contentType };

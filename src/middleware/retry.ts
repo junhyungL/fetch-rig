@@ -59,7 +59,9 @@ export function retry(options: RetryOptions = {}): FetchMiddleware {
       } catch (error) {
         // Default: never retry a CanceledError (an explicit user cancellation). shouldRetry can
         // override this default judgment, e.g. for a case that wants cancellations retried too.
-        const retryable = shouldRetry ? shouldRetry({ error, attempt }) : !(error instanceof CanceledError);
+        const retryable = shouldRetry
+          ? shouldRetry({ error, attempt })
+          : !(error instanceof CanceledError);
         if (!spare || !retryable) throw error;
       }
 
@@ -69,7 +71,9 @@ export function retry(options: RetryOptions = {}): FetchMiddleware {
 
       const serverDelay = ctx.response ? parseRetryAfter(ctx.response.headers) : undefined;
       // No jitter once the server has specified a timing — a deterministic server instruction wins.
-      const delay = serverDelay ?? applyJitter(Math.min(minTimeout * factor ** (attempt - 1), maxTimeout), jitter);
+      const delay =
+        serverDelay ??
+        applyJitter(Math.min(minTimeout * factor ** (attempt - 1), maxTimeout), jitter);
       try {
         await sleep(delay, ctx.signal);
       } catch {

@@ -28,13 +28,6 @@
     "useDefineForClassFields": true,
     "skipLibCheck": true
   },
-  "include": [
-    "src/**/*",
-    "tests/**/*",
-    "vite.config.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src/**/*", "tests/**/*", "vite.config.ts"],
+  "exclude": ["node_modules", "dist"]
 }

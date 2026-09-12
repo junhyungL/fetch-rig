@@ -82,7 +82,9 @@ describe('dispatch upload-progress fallback', () => {
   });
 
   it('defaults to total 0 when uploadBytes is omitted, in the plain (no-streaming) path', async () => {
-    vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(JSON.stringify({ ok: true }), { status: 200 }));
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      new Response(JSON.stringify({ ok: true }), { status: 200 }),
+    );
 
     const { request, signal } = normalizeRequest({
       method: 'GET',
@@ -97,7 +99,9 @@ describe('dispatch upload-progress fallback', () => {
   });
 
   it('sends directly (no streaming/fallback path) when onUpload is set but the request has no body', async () => {
-    vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(JSON.stringify({ ok: true }), { status: 200 }));
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      new Response(JSON.stringify({ ok: true }), { status: 200 }),
+    );
 
     const { request, signal } = normalizeRequest({
       method: 'GET',

@@ -106,7 +106,10 @@ export class FetchResponse {
       throw new Error('fetch-rig: this response has no body to stream.');
     }
 
-    const format = !options?.format || options.format === 'auto' ? guessFormat(this.#response.headers) : options.format;
+    const format =
+      !options?.format || options.format === 'auto'
+        ? guessFormat(this.#response.headers)
+        : options.format;
     const decoded = this.#response.body.pipeThrough(new TextDecoderStream());
     const parsed: ReadableStream<StreamResponse> =
       format === 'sse'
