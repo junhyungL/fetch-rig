@@ -1,6 +1,6 @@
 {
   "name": "fetch-rig",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A zero-dependency, universal HTTP client built on the Fetch API. Works in browsers, Node 20+, Deno, Bun, and Cloudflare Workers.",
   "keywords": [
     "fetch",
